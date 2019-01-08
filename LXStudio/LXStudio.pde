@@ -29,6 +29,12 @@ void setup() {
   size(800, 720, P3D);
   lx = new heronarts.lx.studio.LXStudio(this, buildModel(), MULTITHREADED);
   lx.ui.setResizable(RESIZABLE);
+    // Set the patterns
+  lx.setPatterns(new LXPattern[] {
+    //new Psychedelic(lx),
+   // new PlanePattern(lx),
+    new RainbowBarrelRoll(lx)
+  });
 }
 
 void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {

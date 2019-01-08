@@ -40,3 +40,98 @@ public static class PlanePattern extends LXPattern {
     }
   }
 }
+
+/** ************************************************************** PSYCHEDELIC
+ * Colors entire brain in modulatable psychadelic color palettes
+ * Demo pattern for GeneratorPalette.
+ * @author scouras
+ ************************************************************************** */
+class Psychedelic extends LXPattern {
+ 
+  double ms = 0.0;
+  double offset = 0.0;
+  private final BoundedParameter colorScheme = new BoundedParameter("SCM", 0, 3);
+  private final BoundedParameter cycleSpeed = new BoundedParameter("SPD",  10, 0, 200);
+  private final BoundedParameter colorSpread = new BoundedParameter("LEN", 5, 2, 1000);
+  private final BoundedParameter colorHue = new BoundedParameter("HUE",  0., 0., 359.);
+  private final BoundedParameter colorSat = new BoundedParameter("SAT", 80., 0., 100.);
+  private final BoundedParameter colorBrt = new BoundedParameter("BRT", 50., 0., 100.);
+  private GeneratorPalette gp = 
+      new GeneratorPalette(
+          new ColorOffset(0xDD0000).setHue(colorHue)
+                                   .setSaturation(colorSat)
+                                   .setBrightness(colorBrt),
+          //GeneratorPalette.ColorScheme.Complementary,
+          GeneratorPalette.ColorScheme.Monochromatic,
+          //GeneratorPalette.ColorScheme.Triad,
+          //GeneratorPalette.ColorScheme.Analogous,
+          100
+      );
+  private int scheme = 0;
+  //private EvolutionUC16 EV = EvolutionUC16.getEvolution(lx);
+
+  public Psychedelic(LX lx) {
+    super(lx);
+    addParameter(colorScheme);
+    addParameter(cycleSpeed);
+    addParameter(colorSpread);
+    addParameter(colorHue);
+    addParameter(colorSat);
+    addParameter(colorBrt);
+    /*println("Did we find an EV? ");
+    println(EV);
+    EV.bindKnob(colorHue, 0);
+    EV.bindKnob(colorSat, 8);
+    EV.bindKnob(colorBrt, 7);
+    */
+  }
+    
+    public void run(double deltaMs) {
+    int newScheme = (int)Math.floor(colorScheme.getValue());
+    if ( newScheme != scheme) { 
+      switch(newScheme) { 
+        case 0: gp.setScheme(GeneratorPalette.ColorScheme.Analogous); break;
+        case 1: gp.setScheme(GeneratorPalette.ColorScheme.Monochromatic); break;
+        case 2: gp.setScheme(GeneratorPalette.ColorScheme.Triad); break;
+        case 3: gp.setScheme(GeneratorPalette.ColorScheme.Complementary); break;
+        }
+      scheme = newScheme;
+      }
+
+    ms += deltaMs;
+    offset += deltaMs*cycleSpeed.getValue()/1000.;
+    int steps = (int)colorSpread.getValue();
+    if (steps != gp.steps) { 
+      gp.setSteps(steps);
+    }
+    gp.reset((int)offset);
+    for (LXPoint p : model.points) {
+      colors[p.index] = gp.getColor();
+    }
+  }
+}
+
+/** ****************************************************** RAINBOW BARREL ROLL
+ * A colored plane of light rotates around an axis
+ ************************************************************************* **/
+class RainbowBarrelRoll extends LXPattern {
+   float hoo;
+   float anglemod = 0;
+    
+  public RainbowBarrelRoll(LX lx){
+     super(lx);
+  }
+  
+ public void run(double deltaMs) {
+     anglemod=anglemod+1;
+     if (anglemod > 360){
+       anglemod = anglemod % 360;
+     }
+     
+    for (LXPoint p: model.points) {
+      //conveniently, hue is on a scale of 0-360
+      hoo=((atan(p.x/p.z))*360/PI+anglemod);
+      colors[p.index]=lx.hsb(hoo,80,50);
+    }
+  }
+}
