@@ -46,7 +46,8 @@ public static class PlanePattern extends LXPattern {
  * Demo pattern for GeneratorPalette.
  * @author scouras
  ************************************************************************** */
-class Psychedelic extends LXPattern {
+@LXCategory("Form")
+public static class Psychedelic extends LXPattern {
  
   double ms = 0.0;
   double offset = 0.0;
@@ -114,7 +115,8 @@ class Psychedelic extends LXPattern {
 /** ****************************************************** RAINBOW BARREL ROLL
  * A colored plane of light rotates around an axis
  ************************************************************************* **/
-class RainbowBarrelRoll extends LXPattern {
+ @LXCategory("Form")
+public static class RainbowBarrelRoll extends LXPattern {
    float hoo;
    float anglemod = 0;
     
