@@ -36,9 +36,12 @@ void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStu
   // Add custom components or output drivers here
         // Set the patterns
   lx.setPatterns(new LXPattern[] {
-    new PlanePattern(lx),
-    new Psychedelic(lx),
-    new RainbowBarrelRoll(lx)
+    //new PlanePattern(lx),
+    new TestHueSatBright(lx),
+    //new Psychedelic(lx),
+    new RainbowRoll(lx)
+    //new MusicTester(lx),
+
   });
 }
 

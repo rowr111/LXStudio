@@ -116,24 +116,59 @@ public static class Psychedelic extends LXPattern {
  * A colored plane of light rotates around an axis
  ************************************************************************* **/
  @LXCategory("Form")
-public static class RainbowBarrelRoll extends LXPattern {
+public static class RainbowRoll extends LXPattern {
    float hoo;
-   float anglemod = 0;
+   
+   public final CompoundParameter angle = new CompoundParameter("Angle", 180, 0, 360)
+    .setDescription("barrel roll angle");
     
-  public RainbowBarrelRoll(LX lx){
-     super(lx);
+  public RainbowRoll(LX lx){
+     super(lx);   
+     addParameter("Angle", this.angle);
   }
   
  public void run(double deltaMs) {
-     anglemod=anglemod+1;
-     if (anglemod > 360){
-       anglemod = anglemod % 360;
-     }
+     //anglemod=anglemod+1;
+     //if (anglemod > 360){
+       //anglemod = anglemod % 360;
+     //}
      
     for (LXPoint p: model.points) {
       //conveniently, hue is on a scale of 0-360
-      hoo=((atan(p.x/p.z))*360/PI+anglemod);
+      hoo=((atan(p.x/p.z))*360/PI+this.angle.getValuef());
       colors[p.index]=lx.hsb(hoo,80,50);
     }
   }
+}
+
+
+//fucking around testing audio stuff
+@LXCategory("Form")
+public class MusicTester extends LXPattern {
+  //private GraphicEQ eq = null;
+  //List<List<LXPoint>> strips_emanating_from_nodes = new ArrayList<List<LXPoint>>();
+  private LXAudioEngine audioEngine = new LXAudioEngine(lx);
+  private LXAudioInput audioInput = audioEngine.getInput();
+
+  private DecibelMeter dbMeter = audioEngine.meter;
+ 
+  public MusicTester(LX lx) {
+    super(lx);
+      //addModulator(dbMeter).start();
+  }
+  
+  public void run(double deltaMs) {
+    
+    //float bassLevel = audioInput.mix.level();//eq.getAveragef(0, 5) * 5000;
+    float soundLevel = -dbMeter.getDecibelsf()*0.5;
+    println(lx.tempo.bpm());
+    float myTempo = (float)lx.tempo.bpm();
+    for (LXPoint p: model.points) {
+      colors[p.index] = lx.hsb(random(100,120),40,40);
+       float hoo = 300- 2500/myTempo;
+        float saturat = 100;
+        float britness = max(0, 100 - 2500/myTempo);
+       addColor(p.index, lx.hsb(hoo, saturat, britness));
+    }
+   }
 }

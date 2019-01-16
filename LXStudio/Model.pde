@@ -5,7 +5,7 @@ LXModel buildModel() {
 
 public static class GridModel3D extends LXModel {
   
-  public final static int SIZE = 20;
+  public final static int SIZE = 39;
   
   public GridModel3D() {
     super(new Fixture());
