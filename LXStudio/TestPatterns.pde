@@ -33,3 +33,37 @@ public class TestHueSatBright extends LXPattern {
     }
   }
 }
+
+//each face has a different color, iterating
+//todo: this pattern is currently borked, fix it
+@LXCategory("Test")
+public class TestFaceIterator extends LXPattern {
+   public final CompoundParameter delay = new CompoundParameter("delaytime", 100, 1, 2000)
+    .setDescription("ms between iterations"); 
+    
+
+    
+   public TestFaceIterator(LX lx) {
+    super(lx);
+    addParameter("delaytime", this.delay);
+  }
+  
+  int hue = 0;
+  
+  public void run(double deltaMs) {
+    //this.timer.wait((long)this.delay.getValue());
+    List<List<LXPoint>> faces = new ArrayList<List<LXPoint>>();
+    faces.add(XY0); faces.add(XY1); faces.add(YZ0); faces.add(YZ1); faces.add(XZ0); faces.add(XZ1);
+
+    for (List<LXPoint> face: faces) {
+      
+       hue += 1;
+       if (hue > 360)
+         hue = hue % 360;
+       for (LXPoint p: face)
+         colors[p.index]=lx.hsb(hue, 100, 80);
+    }
+  
+  }
+
+}
