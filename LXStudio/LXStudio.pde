@@ -37,6 +37,7 @@ void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStu
         // Set the patterns
   lx.setPatterns(new LXPattern[] {
     //new PlanePattern(lx),
+    new TestImage(lx),
     new PatternAudioMeter(lx),
     new TestFaceIterator(lx),
     new TestHueSatBright(lx),

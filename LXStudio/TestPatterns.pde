@@ -67,3 +67,15 @@ public class TestFaceIterator extends LXPattern {
   }
 
 }
+
+@LXCategory("Test")
+public class TestImage extends LXPattern {
+  MentalImage mentalimage = new MentalImage("media/images/stormclouds_purple.jpg","xy",100);  
+  
+  public TestImage(LX lx){
+     super(lx);  
+  }
+ public void run(double deltaMs) {                    
+   colors=this.mentalimage.shiftedImageToPixels(colors,0,0);
+  } 
+}
